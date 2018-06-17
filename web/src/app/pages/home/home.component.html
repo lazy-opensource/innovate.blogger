@@ -1,0 +1,261 @@
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <ul class="nav nav-tabs">
+        <li class="active" >
+          <a (click)="changeTab1('1')" href="#panel-181684" data-toggle="tab">文章</a>
+        </li>
+        <li>
+          <a (click)="changeTab1('2')" href="#panel-490329" data-toggle="tab">说说</a>
+        </li>
+        <li>
+          <a (click)="changeTab1('3')" href="#panel-490328" data-toggle="tab">图片</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active"  id="panel-181684">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title">文章动态</h3>
+            </div>
+            <div *ngIf="articles.length < 1" class="panel-body">
+              暂无任何人发表文章...
+            </div>
+            <div class="panel-body">
+              <div class="col-md-12 column">
+                <ng-container *ngFor="let article of articles; let i = index;">
+                  <div class="well well-sm">
+                    <a style="text-decoration: none;"
+                       routerLink="/private/article/detail/{{article.account_id}}/{{article._id}}">
+                      <div>
+                        <div style="float: left; margin-right: 10px;"><img style="width:50px; height: 50px;" class="img-circle" [src]="article.head_portrait"/></div>
+                        <div style="padding-top: 8px;"><span>标题：<span style="color:black;">{{article.title}}</span></span></div>
+                        <div class="formatDiv"><span>描述：<span style="color:black;">{{article.desc}}</span></span></div>
+                      </div>
+                    </a>
+                    <div class="div-to-hide-hr"></div>
+                    <div>
+                          <span><a style="text-decoration: none;" routerLink="/private/info/{{article.account_id}}">{{article.interspace_name}}</a><span style="color:black;"> 发表于: {{article.update_time | date:
+                          "yyyy-MM-dd HH:mm:ss"}}</span></span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div *ngIf="(articlesPaging.bigTotalItems > 0)"
+                   class="visible-lg visible-md visible-sm col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <pagination [firstText]="articlesPaging.firstText" [previousText]="articlesPaging.previousText"
+                            [lastText]="articlesPaging.lastText"
+                            [nextText]="articlesPaging.nextText" [totalItems]="articlesPaging.bigTotalItems"
+                            [(ngModel)]="articlesPaging.bigCurrentPage"
+                            [maxSize]="articlesPaging.maxSize" class="pagination-sm" [boundaryLinks]="true"
+                            [rotate]="false"
+                            [itemsPerPage]="articlesPaging.limit"
+                            (numPages)="articlesPaging.numPages = $event"
+                            (pageChanged)="articlesPageChanged($event)"></pagination>
+              </div>
+              <div *ngIf="(articlesPaging.bigTotalItems > 0)" class="visible-xs col-xs-12">
+                <pagination [previousText]="articlesPaging.previousText"
+                            [nextText]="articlesPaging.nextText"
+                            [totalItems]="articlesPaging.bigTotalItems"
+                            [(ngModel)]="articlesPaging.bigCurrentPage"
+                            [maxSize]="articlesPaging.xsV" class="pagination-sm"
+                            [boundaryLinks]="false" [rotate]="false"
+                            [itemsPerPage]="articlesPaging.limit"
+                            (numPages)="articlesPaging.numPages = $event"
+                            (pageChanged)="articlesPageChanged($event)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane"  id="panel-490329">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title">说说动态</h3>
+            </div>
+            <div *ngIf="notes.length < 1" class="panel-body">
+              暂无任何人发表说说...
+            </div>
+            <div class="panel-body">
+              <div class="col-md-12 column">
+                <ng-container *ngFor="let note of notes; let i = index;">
+                  <div class="well well-sm">
+                    <div>
+                      <div style="float: left; margin-right: 10px;"><img style="width:50px; height: 50px;" class="img-circle" [src]="note.head_portrait"/></div>
+                      <div style="padding-top: 8px;"><a style="text-decoration: none;" routerLink="/private/info/{{note.account_id}}">{{note.interspace_name}}</a></div>
+                      <div><span>发表于：{{note.update_time | date: "yyyy-MM-dd HH:mm:ss"}}</span></div>
+                    </div>
+                    <div class="div-to-hide-hr"></div>
+                    <a style="text-decoration: none;" routerLink="/private/note/{{note.account_id}}">
+                      <div class="formatDiv" style="color: black;">{{note.content}}</div> </a>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div *ngIf="(notesPaging.bigTotalItems > 0)"
+                   class="visible-lg visible-md visible-sm col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <pagination [firstText]="notesPaging.firstText" [previousText]="notesPaging.previousText"
+                            [lastText]="notesPaging.lastText"
+                            [nextText]="notesPaging.nextText" [totalItems]="notesPaging.bigTotalItems"
+                            [(ngModel)]="notesPaging.bigCurrentPage"
+                            [maxSize]="notesPaging.maxSize" class="pagination-sm" [boundaryLinks]="true"
+                            [rotate]="false"
+                            [itemsPerPage]="notesPaging.limit"
+                            (numPages)="notesPaging.numPages = $event"
+                            (pageChanged)="notesPageChanged($event)"></pagination>
+              </div>
+              <div *ngIf="(notesPaging.bigTotalItems > 0)" class="visible-xs col-xs-12">
+                <pagination [previousText]="notesPaging.previousText"
+                            [nextText]="notesPaging.nextText"
+                            [totalItems]="notesPaging.bigTotalItems"
+                            [(ngModel)]="notesPaging.bigCurrentPage"
+                            [maxSize]="notesPaging.xsV" class="pagination-sm"
+                            [boundaryLinks]="false" [rotate]="false"
+                            [itemsPerPage]="notesPaging.limit"
+                            (numPages)="notesPaging.numPages = $event"
+                            (pageChanged)="notesPageChanged($event)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="panel-490328">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title">图片动态</h3>
+            </div>
+            <div *ngIf="images.length < 1" class="panel-body">
+              暂无任何人发表图片...
+            </div>
+            <div class="panel-body visible-xs visible-sm">
+              <div class="col-md-6 column">
+                <carousel>
+                  <ng-container *ngFor="let image of images; let i = index;">
+                    <slide>
+                      <a routerLink="/private/image/{{image.account_id}}">
+                        <div>
+                          <img style="width:100%; height: 200px;" class="img-responsive" src="{{image.image_url}}">
+                          <div class="carousel-caption">
+                            <h4>{{image.interspace_name}}</h4>
+                            <p>发表于：{{image.update_time | date: "yyyy-MM-dd HH:mm:ss"}}</p>
+                          </div>
+                        </div>
+                      </a>
+                    </slide>
+                  </ng-container>
+                </carousel>
+              </div>
+            </div>
+            <div class="panel-body visible-lg visible-md">
+              <div class="col-md-6 column">
+                <carousel>
+                  <ng-container *ngFor="let image of images; let i = index;">
+                    <ng-container *ngIf="i % 2 == 0">
+                      <slide>
+                        <a routerLink="/private/image/{{image.account_id}}">
+                          <div>
+                            <img style="width:100%; height: 300px;" class="img-responsive" src="{{image.image_url}}">
+                            <div class="carousel-caption">
+                              <h3>{{image.interspace_name}}</h3>
+                              <p>发表于：{{image.update_time | date: "yyyy-MM-dd HH:mm:ss"}}</p>
+                            </div>
+                          </div>
+                        </a>
+                      </slide>
+                    </ng-container>
+                  </ng-container>
+                </carousel>
+              </div>
+              <div class="col-md-6 column">
+                <carousel>
+                  <ng-container *ngFor="let image of images; let i = index;">
+                    <ng-container *ngIf="i % 2 != 0">
+                      <slide>
+                        <a routerLink="/private/image/{{image.account_id}}">
+                          <div>
+                            <img style="width:100%; height: 300px;" class="img-responsive" src="{{image.image_url}}">
+                            <div class="carousel-caption">
+                              <h3>{{image.interspace_name}}</h3>
+                              <p>发表于：{{image.update_time | date: "yyyy-MM-dd HH:mm:ss"}}</p>
+                            </div>
+                          </div>
+                        </a>
+                      </slide>
+                    </ng-container>
+                  </ng-container>
+                </carousel>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <ul id="myTab" class="nav nav-tabs">
+        <ng-container *ngFor="let type of newsTypes; let i = index;">
+          <ng-container *ngIf="i == 0">
+            <li class="active"><a (click)="changeTab(type.no)" data-toggle="tab">{{type.name}}</a></li>
+          </ng-container>
+          <ng-container *ngIf="i > 0 && i < 11">
+            <li><a (click)="changeTab(type.no)" data-toggle="tab">{{type.name}}</a></li>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="newsTypes.length > 10">
+          <li class="dropdown">
+            <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">更多<b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+              <ng-container *ngFor="let type of newsTypes; let i = index;">
+                <ng-container *ngIf="i > 10">
+                  <li><a (click)="changeTab(type.no)" data-toggle="tab">{{type.name}}</a></li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+      <div id="myTabContent" *ngIf="news.length > 0" class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+          <div class="panel panel-warning">
+            <div class="panel-heading">
+              <h3 class="panel-title">最新新闻</h3>
+            </div>
+            <div class="panel-body">
+              <div *ngFor="let new of news;" style="height: 100%;" class="col-md-4 col-log-4 col-sm-6 col-xs-12">
+                <div class="thumbnail">
+                  <img style="width:90%; height: 200px;" class="img-responsive" src="{{new.imgsrc}}"/>
+                  <div class="caption">
+                    <h3>{{new.title}}</h3>
+                    <p>{{new.digest}}</p>
+                    <p><a>发布于 {{new.ptime}}</a></p>
+                    <p><a target="_blank" href="{{new.url}}">查看全文 »</a></p>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(paging.bigTotalItems > 0)"
+                   class="visible-lg visible-md visible-sm col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                <pagination [firstText]="paging.firstText" [previousText]="paging.previousText"
+                            [lastText]="paging.lastText"
+                            [nextText]="paging.nextText" [totalItems]="paging.bigTotalItems"
+                            [(ngModel)]="paging.bigCurrentPage"
+                            [maxSize]="paging.maxSize" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"
+                            [itemsPerPage]="paging.limit"
+                            (numPages)="paging.numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+              </div>
+              <div *ngIf="(paging.bigTotalItems > 0)" class="visible-xs col-xs-12">
+                <pagination [previousText]="paging.previousText"
+                            [nextText]="paging.nextText"
+                            [totalItems]="paging.bigTotalItems"
+                            [(ngModel)]="paging.bigCurrentPage"
+                            [maxSize]="paging.xsV" class="pagination-sm"
+                            [boundaryLinks]="false" [rotate]="false"
+                            [itemsPerPage]="paging.limit"
+                            (numPages)="paging.numPages = $event"
+                            (pageChanged)="pageChanged($event)"></pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

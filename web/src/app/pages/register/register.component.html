@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="col-md-offset-2 col-lg-8 col-md-8">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">欢迎注册</h3>
+        </div>
+        <div class="panel-body">
+          <form (ngSubmit)="register()" novalidate #registerForm="ngForm" class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-4 control-label"  for="username">账号:</label>
+              <div class="col-sm-5">
+                <input type="text" [(ngModel)]="account.username" class="form-control"
+                       id="username" name="username" #name="ngModel" placeholder="请输入5-25个字符" required minlength="5" maxlength="25"/>
+                <span *ngIf="isRepeatedAccount"  style="color:red;">{{validateMsg}}</span>
+                <!--控件的值无效、控件的值变化了、控件被访问过-->
+                <div *ngIf="name.invalid && (name.dirty || name.touched)">
+                  <span *ngIf="name.errors.required" class="red-font">请输入5-25个字符</span>
+                  <span *ngIf="name.errors.minlength" class="red-font">不足5个字符</span>
+                  <span *ngIf="name.errors.maxlength" class="red-font">请不要超过25个字符</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-4 control-label" for="password">密码:</label>
+              <div class="col-sm-5">
+                <input type="password" [(ngModel)]="account.password" class="form-control"
+                       id="password" #password="ngModel" name="password" placeholder="请输入6个以上25以下字符" required minlength="6" maxlength="25"/>
+                <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                  <span *ngIf="password.errors.required" class="red-font">请输入6-25个字符</span>
+                  <span *ngIf="password.errors.minlength" class="red-font">不足6个字符</span>
+                  <span *ngIf="password.errors.maxlength" class="red-font">请不要超过25个字符</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-4 control-label" for="confirmPassword">确认密码:</label>
+              <div class="col-sm-5">
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="account.confirmPassword"
+                       placeholder="确认密码" required compareTo="password" #confirmPassword="ngModel"/>
+                <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched) && confirmPassword.errors.required ">
+                  <span class="red-font">请输入6-25个字符</span>
+                </div>
+                <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched) && confirmPassword.errors.compareTo && !confirmPassword.errors.required">
+                  <span class="red-font">两次输入密码不一致</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-4 control-label" for="interspace_name">博客空间名称(后续不可修改)：</label>
+              <div class="col-sm-5">
+                <input type="text" [(ngModel)]="account.interspace_name" class="form-control" id="interspace_name" name="interspace_name"
+                       #interspace_name="ngModel" placeholder="输入6位以上25以下字符串" required minlength="2" maxlength="15"/>
+                <div *ngIf="interspace_name.invalid && (interspace_name.dirty || interspace_name.touched)">
+                  <span *ngIf="interspace_name.errors.required" class="red-font">请输入2-15个字符</span>
+                  <span *ngIf="interspace_name.errors.minlength" class="red-font">不足2个字符</span>
+                  <span *ngIf="interspace_name.errors.maxlength" class="red-font">请不要超过15个字符</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-4 control-label" for="encrypted">密保码（用于找回密码，请牢记）：</label>
+              <div class="col-sm-5">
+                <input type="text" [(ngModel)]="account.encrypted" class="form-control" id="encrypted" name="encrypted"
+                      #encrypted="ngModel" placeholder="输入6位以上25以下字符串" required minlength="6" maxlength="25"/>
+                <div *ngIf="encrypted.invalid && (encrypted.dirty || encrypted.touched)">
+                  <span *ngIf="encrypted.errors.required" class="red-font">请输入6-25个字符</span>
+                  <span *ngIf="encrypted.errors.minlength" class="red-font">不足6个字符</span>
+                  <span *ngIf="encrypted.errors.maxlength" class="red-font">请不要超过25个字符</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-9 col-sm-offset-4">
+                <button type="submit" [disabled]="!registerForm.form.valid" class="btn btn-success">注册</button>
+                <a (click)="home()" class="btn btn-default" >首页</a>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-8  col-sm-offset-3 col-md-offset-4 col-lg-offset-4">
+              <span *ngIf="showMsg" style="color:red;">{{sysMsg}}</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<sub-nav [requestAccountId]="requestAccountId" [tab]="2"></sub-nav>
+<div class="container">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <div *ngIf="authorizationService.currentUser._id != requestAccountId">
+        <h3 class="panel-title">日记</h3>
+      </div>
+      <div *ngIf="authorizationService.currentUser._id == requestAccountId">
+        <button [class.hidden]="isShow" class="btn btn-default" (click)="changeBtn()" type="button">写日记</button>
+        <button [class.hidden]="!isShow" class="btn btn-default" (click)="changeBtn()" type="button">取消</button>
+      </div>
+    </div>
+    <div *ngIf="isShow" class="panel-body">
+      <div *ngIf="showMsg" class="alert alert-danger">{{sysMsg}}</div>
+      <form novalidate #noteForm="ngForm" (ngSubmit)="submitNote()" role="form">
+        <div class="form-group">
+          <textarea class="form-control" [(ngModel)]="content" (keyup)="keyup()" (mousemove)="keyup()" name="content"
+                    maxlength="{{initContentNumber}}" rows="3" placeholder="说点什么..." required></textarea>
+          <span>还可以输入{{contentNumber}}个字</span>
+        </div>
+        <div class="form-group col-lg-offset-6 col-md-offset-6 col-sm-offset-6 col-xs-offset-5">
+          <button [disabled]="!noteForm.form.valid" class="btn btn-success" type="submit">发&nbsp;&nbsp;表</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel-body" *ngIf="!isShow">
+      <div *ngIf="showMsg" class="alert alert-danger">{{sysMsg}}</div>
+      <div [class.hidden]="paging.bigTotalItems > 0">
+        <p>
+          暂无日记........
+        </p>
+      </div>
+      <div [class.hidden]="paging.bigTotalItems < 0">
+        <div class="well well-sm" *ngFor="let note of notes">
+          <div>
+            <div style="float: left; margin-right: 10px;"><img style="width:50px; height: 50px;" class="img-circle" [src]="head_portrait"/></div>
+            <div style="padding-top: 8px;"><span>{{note.interspace_name}}</span></div>
+            <div><span>{{note.update_time | date: "yyyy-MM-dd HH:mm:ss"}}</span></div>
+          </div>
+          <div class="div-to-hide-hr"></div>
+          <div class="formatDiv">{{note.content}}</div>
+
+          <estimate [doc]="note" (onComment)="onComment($event)" (onPraise)="onPraise($event)"
+                    (onReply)="onReply($event)" (onDeleteDocBefore)="onDeleteDocBefore($event)" (onDeleteCommentBefore)="onDeleteCommentBefore($event)"></estimate>
+          <div hidden="true" id="T{{note._id}}">
+            <div style="margin-bottom: 5px;">
+              <input (keyup)="keyupComment()" (mousemove)="keyupComment()" maxlength="{{initCommentMaxLength}}" name="commentContent" [(ngModel)]="commentContent" type="text" class="form-control T{{note._id}}" placeholder="">
+              <span>你还可以输入{{commentMaxLength}}个字</span>
+            </div>
+            <a (click)="cancleCommen(note._id)" class="comment-a-cancle" style="text-decoration: none;">取消评论</a>
+            <a (click)="submitComment(note._id)" *ngIf="!hideSubmitComment" style="text-decoration: none;">提交评论</a>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="(paging.bigTotalItems > 0)" class="visible-lg visible-md visible-sm col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <pagination [firstText]="paging.firstText" [previousText]="paging.previousText" [lastText]="paging.lastText"
+                    [nextText]="paging.nextText" [totalItems]="paging.bigTotalItems" [(ngModel)]="paging.bigCurrentPage"
+                    [maxSize]="paging.maxSize" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paging.limit"
+                    (numPages)="paging.numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+      </div>
+      <div *ngIf="(paging.bigTotalItems > 0)" class="visible-xs col-xs-12">
+        <pagination [previousText]="paging.previousText"
+                    [nextText]="paging.nextText"
+                    [totalItems]="paging.bigTotalItems"
+                    [(ngModel)]="paging.bigCurrentPage"
+                    [maxSize]="paging.xsV" class="pagination-sm"
+                    [boundaryLinks]="false" [rotate]="false"
+                    [itemsPerPage]="paging.limit"
+                    (numPages)="paging.numPages = $event"
+                    (pageChanged)="pageChanged($event)"></pagination>
+      </div>
+      <template #appModalTemplate>
+        <div class="modal-body">
+          {{appModal.content}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" (click)="cancleModal()">取消</button>
+          <button type="button" class="btn btn-default" (click)="excuteDel()">确定</button>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
